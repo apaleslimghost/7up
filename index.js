@@ -147,6 +147,43 @@ class TiledSprite extends Sprite {
 	}
 }
 
+class AnimatedSprite extends Sprite {
+	_frame = 0;
+	frames = [];
+	timings = [];
+
+	get pixels() {
+		return this.frames[this.frame];
+	}
+
+	set pixels(nah) {}
+
+	get length() {
+		return this.timings.reduce((a,t) => a + t, 0);
+	}
+
+	get frame() {
+		return this._frame;
+	}
+
+	set frame(frame) {
+		this._frame = frame;
+		this.stale = true;
+	}
+
+	tick(t) {
+		const tb = t % this.length;
+		let acc = 0;
+		for(const [i, timing] of this.timings.entries()) {
+			acc += timing;
+			if(tb < acc) {
+				this.frame = i;
+				return;
+			}
+		}
+	}
+}
+
 class Circle extends Sprite {
 	pixels = [
 		[0,0,0,0,1,1,0,0,0,0],
@@ -160,6 +197,34 @@ class Circle extends Sprite {
 		[0,0,1,1,1,1,1,1,0,0],
 		[0,0,0,0,1,1,0,0,0,0],
 	];
+}
+
+class What extends AnimatedSprite {
+	frames = [[
+		[0,0,0,0,1,1,0,0,0,0],
+		[0,0,1,1,1,1,1,1,0,0],
+		[0,1,1,1,1,1,1,1,1,0],
+		[0,1,1,1,1,1,1,1,1,0],
+		[1,1,1,1,1,1,1,1,1,1],
+		[1,1,1,1,1,1,1,1,1,1],
+		[0,1,1,1,1,1,1,1,1,0],
+		[0,1,1,1,1,1,1,1,1,0],
+		[0,0,1,1,1,1,1,1,0,0],
+		[0,0,0,0,1,1,0,0,0,0],
+	], [
+		[0,0,0,0,1,1,0,0,0,0],
+		[0,0,1,1,1,1,1,1,0,0],
+		[0,1,1,1,1,1,1,1,1,0],
+		[0,1,1,1,2,2,1,1,1,0],
+		[1,1,1,2,2,2,2,1,1,1],
+		[1,1,1,2,2,2,2,1,1,1],
+		[0,1,1,1,2,2,1,1,1,0],
+		[0,1,1,1,1,1,1,1,1,0],
+		[0,0,1,1,1,1,1,1,0,0],
+		[0,0,0,0,1,1,0,0,0,0],
+	]];
+
+	timings = [500, 500];
 }
 
 class Layer extends struct('objects', 'blendMode') {
@@ -228,9 +293,10 @@ class Canvas extends struct('layers') {
 	}
 }
 
-const circle1 = new Circle(new Point(95, 95), {
+const circle1 = new What(new Point(95, 95), {
 	0: 'transparent',
 	1: '#FF0000',
+	2: '#0000FF',
 });
 
 const circle2 = new Circle(new Point(100, 95), {
@@ -269,6 +335,7 @@ loop.on('tick', t => {
 		Math.round(95 + 5 * Math.sin(t / 1000))
 	));
 });
+loop.on('tick', circle1.tick.bind(circle1));
 loop.on('tick', () => layer.draw(ctx));
 
 loop.start();
