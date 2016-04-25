@@ -57,6 +57,7 @@ class BoundingRect extends struct('origin', 'opposite') {
 
 class Sprite extends struct('origin', 'palette') {
 	pixels = [];
+	stale = true;
 
 	get boundingBox() {
 		return new BoundingRect(
@@ -87,6 +88,11 @@ class Sprite extends struct('origin', 'palette') {
 		}
 		return this.palette[this.pixels[rx][ry]];
 	}
+
+	move(origin) {
+		this.origin = origin;
+		this.stale = true;
+	}
 }
 
 class Circle extends Sprite {
@@ -110,13 +116,16 @@ class Layer extends struct('objects', 'blendMode') {
 	}
 
 	changedPixels() {
-		return flatMapUniq(this.objects, object => object.changedPixels());
+		return flatMapUniq(this.objects.filter(object => object.stale), object => object.changedPixels());
 	}
 
 	getPixel(x, y) {
 		for(const object of this.objects) {
 			const pixel = object.getPixel(x, y);
-			if(pixel) return pixel;
+			if(pixel) {
+				object.stale = false;
+				return pixel;
+			}
 		}
 
 		return false;
