@@ -304,12 +304,12 @@ const circle2 = new Circle(new Point(100, 95), {
 	1: '#00FF00',
 });
 
-const circle3 = new Circle(new Point(195, 95), {
+const circle3 = new Circle(new Point(105, 95), {
 	0: 'transparent',
 	1: '#FFFF00',
 });
 
-const circle4 = new What(new Point(200, 95), {
+const circle4 = new What(new Point(110, 95), {
 	0: 'transparent',
 	1: '#00FFFF',
 	2: '#0000FF',
@@ -346,9 +346,13 @@ loop.on('tick', t => {
 		Math.round(95 + 5 * Math.sin(t / 1000))
 	));
 	circle4.move(new Point(
-		Math.round(195 + 5 * Math.cos(t / 1000)),
+		Math.round(105 + 5 * Math.cos(t / 1000)),
 		Math.round(95 + 5 * Math.sin(t / 1000))
 	));
+	circle3.move(new Point(
+		105 + Math.round(4 * Math.random()),
+		95 + Math.round(4 * Math.random())
+	))
 });
 loop.on('tick', circle1.tick.bind(circle1));
 loop.on('tick', circle4.tick.bind(circle4));
