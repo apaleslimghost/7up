@@ -304,6 +304,17 @@ const circle2 = new Circle(new Point(100, 95), {
 	1: '#00FF00',
 });
 
+const circle3 = new Circle(new Point(195, 95), {
+	0: 'transparent',
+	1: '#FFFF00',
+});
+
+const circle4 = new What(new Point(200, 95), {
+	0: 'transparent',
+	1: '#00FFFF',
+	2: '#0000FF',
+});
+
 const layer = new Canvas([
 	new Layer([new Background('#000')], false),
 	new Layer([new (class extends TiledSprite {
@@ -316,8 +327,8 @@ const layer = new Canvas([
 			[0,0,0,1,1,1],
 		]
 	})(new Point(0, 0), {0:'#666', 1: '#888'})], false),
-	new Layer([circle1], false),
-	new Layer([circle2], 'lighter')
+	new Layer([circle1, circle3], false),
+	new Layer([circle2, circle4], 'lighter')
 ]);
 
 const canvas = document.createElement('canvas');
@@ -334,8 +345,13 @@ loop.on('tick', t => {
 		Math.round(95 + 5 * Math.cos(t / 1000)),
 		Math.round(95 + 5 * Math.sin(t / 1000))
 	));
+	circle4.move(new Point(
+		Math.round(195 + 5 * Math.cos(t / 1000)),
+		Math.round(95 + 5 * Math.sin(t / 1000))
+	));
 });
 loop.on('tick', circle1.tick.bind(circle1));
+loop.on('tick', circle4.tick.bind(circle4));
 loop.on('tick', () => layer.draw(ctx));
 
 loop.start();
