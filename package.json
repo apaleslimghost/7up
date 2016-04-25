@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@quarterto/animation-loop": "^1.1.0",
     "@quarterto/browser": "^1.1.0",
     "@quarterto/flat-map-uniq": "^1.0.0",
     "@quarterto/flatmap": "^1.0.0",
