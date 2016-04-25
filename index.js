@@ -79,13 +79,21 @@ class Sprite extends struct('_origin', 'palette') {
 		return new BoundingRect(
 			this.origin,
 			this.origin.add({
-				x: this.pixels[0].length,
-				y: this.pixels.length,
+				x: this.width,
+				y: this.height,
 			})
 		);
 	}
 
 	lastBoundingBox = null;
+
+	get width() {
+		return this.pixels[0].length;
+	}
+
+	get height() {
+		return this.pixels.length;
+	}
 
 	changedPixels() {
 		if(this.lastBoundingBox) {
@@ -99,7 +107,7 @@ class Sprite extends struct('_origin', 'palette') {
 	getPixel(x, y) {
 		const rx = x - this.origin.x;
 		const ry = y - this.origin.y;
-		if(rx < 0 || ry < 0 || rx >= this.pixels[0].length || ry >= this.pixels.length) {
+		if(rx < 0 || ry < 0 || rx >= this.width || ry >= this.height) {
 			return false;
 		}
 		return this.palette[this.pixels[rx][ry]];
@@ -117,6 +125,25 @@ class Sprite extends struct('_origin', 'palette') {
 
 	move(origin) {
 		this.origin = origin;
+	}
+}
+
+class TiledSprite extends Sprite {
+	maxWidth = 500;
+	maxHeight = 500;
+
+	getPixel(x, y) {
+		return super.getPixel(x % this.width, y % this.height);
+	}
+
+	get boundingBox() {
+		return new BoundingRect(
+			this.origin,
+			this.origin.add({
+				x: this.maxWidth,
+				y: this.maxHeight,
+			})
+		);
 	}
 }
 
@@ -202,17 +229,27 @@ class Canvas extends struct('layers') {
 }
 
 const circle1 = new Circle(new Point(95, 95), {
-	0: '#000',
+	0: 'transparent',
 	1: '#FF0000',
 });
 
 const circle2 = new Circle(new Point(100, 95), {
-	0: '#000',
+	0: 'transparent',
 	1: '#00FF00',
 });
 
 const layer = new Canvas([
 	new Layer([new Background('#000')], false),
+	new Layer([new (class extends TiledSprite {
+		pixels = [
+			[1,1,1,0,0,0],
+			[1,1,1,0,0,0],
+			[1,1,1,0,0,0],
+			[0,0,0,1,1,1],
+			[0,0,0,1,1,1],
+			[0,0,0,1,1,1],
+		]
+	})(new Point(0, 0), {0:'#666', 1: '#888'})], false),
 	new Layer([circle1], false),
 	new Layer([circle2], 'lighter')
 ]);
