@@ -1,7 +1,7 @@
 {
   "name": "7up",
   "description": "sprite-drawing engine for canvas. byo animation loop",
-  "version": "1.0.0",
+  "version": "1.0.0-0",
   "main": "./lib/index.js",
   "files": [
     "lib"
