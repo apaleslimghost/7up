@@ -42,7 +42,7 @@ export class Sprite extends struct('_origin', 'palette') {
 		if(rx < 0 || ry < 0 || rx >= this.width || ry >= this.height) {
 			return false;
 		}
-		return this.palette[this.pixels[rx][ry]];
+		return this.palette[this.pixels[ry][rx]];
 	}
 
 	get origin() {

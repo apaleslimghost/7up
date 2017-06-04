@@ -1,6 +1,7 @@
 import struct from '@quarterto/struct';
 
 class Background extends struct('color') {
+
 	get stale() {
 		return false;
 	}
