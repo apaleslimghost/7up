@@ -1,4 +1,5 @@
 import struct from '@quarterto/struct';
+import flatMapUniq from '@quarterto/flat-map-uniq';
 import {BoundingGroup} from './bounding';
 
 export default class Canvas extends struct('layers') {
@@ -11,10 +12,16 @@ export default class Canvas extends struct('layers') {
 	}
 
 	draw(ctx) {
-		this.changedPixels().forEach(pixel => {
-			this.layers.forEach(layer => {
+		this.layers.forEach(layer => {
+			this.changedPixels().forEach(pixel => {
 				layer.drawPixel(ctx, pixel);
 			})
+		});
+	}
+
+	tick(t) {
+		this.layers.forEach(layer => {
+			layer.tick(t);
 		});
 	}
 }

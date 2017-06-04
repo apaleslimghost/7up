@@ -58,6 +58,8 @@ export class Sprite extends struct('_origin', 'palette') {
 	move(origin) {
 		this.origin = origin;
 	}
+
+	tick() {}
 }
 
 export class TiledSprite extends Sprite {
@@ -77,6 +79,8 @@ export class TiledSprite extends Sprite {
 			})
 		);
 	}
+
+	tick() {}
 }
 
 export class AnimatedSprite extends Sprite {

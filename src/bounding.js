@@ -1,4 +1,8 @@
 import struct from '@quarterto/struct';
+import flatMapUniq from '@quarterto/flat-map-uniq';
+import flatMap from '@quarterto/flatmap';
+import range from 'lodash.range';
+import Point from './point';
 
 export class BoundingGroup extends struct('children') {
 	pixels() {

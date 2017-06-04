@@ -14,4 +14,8 @@ class Background extends struct('color') {
 	getPixel() {
 		return this.color;
 	}
+
+	tick() {}
 }
+
+export default Background;

@@ -30,4 +30,10 @@ export default class Layer extends struct('objects', 'blendMode') {
 		ctx.fillStyle = this.getPixel(x, y) || 'transparent';
 		ctx.fillRect(x, y, 1, 1);
 	}
+
+	tick(t) {
+		this.objects.forEach(object => {
+			object.tick(t);
+		});
+	}
 }
